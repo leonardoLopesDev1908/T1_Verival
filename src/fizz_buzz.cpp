@@ -12,7 +12,7 @@ void FizzBuzz::fizz(std::function<void()> printFizz)
 	{
 		//pre condition
 		std::unique_lock<std::mutex> lck(mtx);
-		while(i <= n && !(i % 3 == 0 && i % 5 != 0)		
+		while(i <= n && !(i % 3 == 0 && i % 5 != 0))
             cv.wait(lck);
 		if(i <= n)
 		{
@@ -28,7 +28,7 @@ void FizzBuzz::buzz(std::function<void()> printBuzz)
 {
 	//pre condition
 	std::unique_lock<std::mutex> lck(mtx);
-	while(i <= n && !(i % 3 != 0 && i % 5 == 0)
+	while(i <= n && !(i % 3 != 0 && i % 5 == 0))
 	    cv.wait(lck);
 	if(i <= n)
 	{
@@ -38,11 +38,11 @@ void FizzBuzz::buzz(std::function<void()> printBuzz)
 	cv.notify_all();
 }
 
-void FizzBuzz::fizzbuzz(std::function<void()> printFizzBuzz) 
+void FizzBuzz::fizz_buzz(std::function<void()> printFizzBuzz) 
 {
 	//pre condition
 	std::unique_lock<std::mutex> lck(mtx);
-	while(i <= n && !(i % 3 == 0 && i % 5 == 0)
+	while(i <= n && !(i % 3 == 0 && i % 5 == 0))
 		cv.wait(lck);
 	if(i <= n)
     {	
@@ -57,7 +57,7 @@ void FizzBuzz::number(std::function<(int)> printNumber)
 {
 	//pre condition
 	std::unique_lock<std::mutex> lck(mtx);
-	while(i <= n && !(i % 3 != 0 && i % 5 != 0)
+	while(i <= n && !(i % 3 != 0 && i % 5 != 0))
 		cv.wait(lck);
 	if(i <= n)
 	{
