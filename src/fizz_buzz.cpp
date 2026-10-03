@@ -1,7 +1,6 @@
 #include "fizz_buzz.h"
 #include <contracts>
 
-
 FizzBuzz::FizzBuzz(int n)
 {
 	this->n = n;
@@ -10,71 +9,89 @@ FizzBuzz::FizzBuzz(int n)
 
 void FizzBuzz::fizz(std::function<void()> printFizz) 
 {
-	while(i <= n)
+	while(true)
 	{
-		//pre condition
 		std::unique_lock<std::mutex> lck(mtx);
-		while(i <= n && !(i % 3 == 0 && i % 5 != 0))
-            cv.wait(lck);
-		if(i <= n)
-		{
-			printFizz();
-			i++;
-		}
+		cv.wait(lck, [this] { return i > n || (i % 3 == 0 && i % 5 != 0); });
+		if(i > n) return;
+
+        contract_assert(invariant());           
+        contract_assert(i % 3 == 0 && i % 5 != 0);    
+		
+        printFizz();
+        int savedIndex = i;
+        i++;
+        
+        contract_assert(i == savedIndex + 1);
+        contract_assert(invariant());
+
         cv.notify_all();
-		//post condition
 	}
 }
 
 void FizzBuzz::buzz(std::function<void()> printBuzz) 
 {
-	while(i <= n)
+	while(true)
     {
-        //pre condition
 	    std::unique_lock<std::mutex> lck(mtx);
-	    while(i <= n && !(i % 3 != 0 && i % 5 == 0))
-	        cv.wait(lck);
-	    if(i <= n)
-	    {
-	    	printBuzz();
-	    }
+	    cv.wait(lck, [this] { return i > n || (i % 3 != 0 && i % 5 == 0); });
+		if(i > n) return;
+
+        contract_assert(invariant());           
+        contract_assert(i % 3 != 0 && i % 5 == 0);    
+		
+        printBuzz();
+        int savedIndex = i;
         i++;
-	    cv.notify_all();
+        
+        contract_assert(i == savedIndex + 1);
+        contract_assert(invariant());
+
+        cv.notify_all();
     }
 }
 
 void FizzBuzz::fizz_buzz(std::function<void()> printFizzBuzz) 
 {
-	while(i <= n)
+	while(true)
     {
-        //pre condition
 	    std::unique_lock<std::mutex> lck(mtx);
-	    while(i <= n && !(i % 3 == 0 && i % 5 == 0))
-		    cv.wait(lck);
-	    if(i <= n)
-        {	
-            printFizzBuzz();
-		    i++;
-	    }
-	    cv.notify_all();
-        //post condition
+	    cv.wait(lck, [this] { return i > n || (i % 3 == 0 && i % 5 == 0); });
+		if(i > n) return;
+
+        contract_assert(invariant());           
+        contract_assert(i % 3 == 0 && i % 5 == 0);    
+		if(i > n) return;
+		
+        printFizzBuzz();
+        int savedIndex = i;
+        i++;
+        
+        contract_assert(i == savedIndex + 1);
+        contract_assert(invariant());
+
+        cv.notify_all();
     }
 }
 
 void FizzBuzz::number(std::function<void(int)> printNumber)
 {
-	while(i <= n)
+	while(true)
     {
-        //pre condition
     	std::unique_lock<std::mutex> lck(mtx);
-	    while(i <= n && !(i % 3 != 0 && i % 5 != 0))
-		    cv.wait(lck);
-	    if(i <= n)
-	    {
-		    printNumber(i);
-		    i++;
-	    }
-	    cv.notify_all();
-	    //post condition
+	    cv.wait(lck, [this] { return i > n || (i % 3 != 0 && i % 5 != 0); });
+		if(i > n) return;
+
+        contract_assert(invariant());           
+        contract_assert(i % 3 != 0 && i % 5 != 0);    
+		
+        printNumber(i);
+        int savedIndex = i;
+        i++;
+        
+        contract_assert(i == savedIndex + 1);
+        contract_assert(invariant());
+
+        cv.notify_all();
     }
 }

@@ -12,6 +12,7 @@ endif()
 add_executable(Main 
     src/main.cpp
     src/fizz_buzz.cpp
+    src/contract_handler.cpp
 )
 
 target_include_directories(Main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
