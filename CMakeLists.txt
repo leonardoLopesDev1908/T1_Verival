@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.20)
 project(FIZZ_BUZZ CXX)
 
 if(MSVC)
-    add_compile_options(/std:c++latest)
+    # Habilita C++26/latest e o suporte experimental a contratos do MSVC
+    add_compile_options(/std:c++latest /experimental:contract)
 else()
     set(CMAKE_CXX_STANDARD 26)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)

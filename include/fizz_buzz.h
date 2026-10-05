@@ -2,18 +2,17 @@
 #define FIZZ_BUZZ_H
 
 #include <condition_variable>
-#include <contracts>
 #include <functional>
 #include <iostream>
 #include <mutex>
-#include <vector>
+#include <stack>
 
 class FizzBuzz
 {
 	int n;
 	int i{1};
 
-    std::vector<std::string> results;
+    std::stack<std::string> results;
 
 	mutable std::mutex mtx;
 	std::condition_variable cv;
@@ -48,6 +47,7 @@ public:
 
     bool invariant() const { return 1 <= i && i <= n+1; }
 
+    std::stack<std::string> getResults() const { return this->results; }
 };
 
 #endif

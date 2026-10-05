@@ -1,10 +1,13 @@
 #include "fizz_buzz.h"
-#include <contracts>
+
+#include <string>
 
 FizzBuzz::FizzBuzz(int n)
 {
 	this->n = n;
-	this->i = 1;	
+    contract_assert(n >= 1);           
+	
+    this->i = 1;
 }
 
 void FizzBuzz::fizz(std::function<void()> printFizz) 
@@ -19,7 +22,7 @@ void FizzBuzz::fizz(std::function<void()> printFizz)
         contract_assert(i % 3 == 0 && i % 5 != 0);    
 		
         printFizz();
-        results.push_front("fizz");
+        results.push("fizz");
         int savedIndex = i;
         i++;
         
@@ -42,7 +45,7 @@ void FizzBuzz::buzz(std::function<void()> printBuzz)
         contract_assert(i % 3 != 0 && i % 5 == 0);    
 		
         printBuzz();
-        results.push_front("buzz");
+        results.push("buzz");
         int savedIndex = i;
         i++;
         
@@ -66,7 +69,7 @@ void FizzBuzz::fizz_buzz(std::function<void()> printFizzBuzz)
 		if(i > n) return;
 		
         printFizzBuzz();
-        results.push_front("fizzbuzz");
+        results.push("fizzbuzz");
         int savedIndex = i;
         i++;
         
@@ -89,7 +92,7 @@ void FizzBuzz::number(std::function<void(int)> printNumber)
         contract_assert(i % 3 != 0 && i % 5 != 0);    
 		
         printNumber(i);
-        results.push_front(std::to_string(i));
+        results.push(std::to_string(i));
         int savedIndex = i;
         i++;
         

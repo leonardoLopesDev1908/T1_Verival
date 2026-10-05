@@ -1,8 +1,9 @@
 #include "fizz_buzz.h"
 
 #include <iostream>
-#include <vector>
+#include <string>
 #include <thread>
+#include <vector>
 
 std::vector<std::string> output;
 
