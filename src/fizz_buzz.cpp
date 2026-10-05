@@ -19,6 +19,7 @@ void FizzBuzz::fizz(std::function<void()> printFizz)
         contract_assert(i % 3 == 0 && i % 5 != 0);    
 		
         printFizz();
+        results.push_front("fizz");
         int savedIndex = i;
         i++;
         
@@ -41,6 +42,7 @@ void FizzBuzz::buzz(std::function<void()> printBuzz)
         contract_assert(i % 3 != 0 && i % 5 == 0);    
 		
         printBuzz();
+        results.push_front("buzz");
         int savedIndex = i;
         i++;
         
@@ -64,6 +66,7 @@ void FizzBuzz::fizz_buzz(std::function<void()> printFizzBuzz)
 		if(i > n) return;
 		
         printFizzBuzz();
+        results.push_front("fizzbuzz");
         int savedIndex = i;
         i++;
         
@@ -86,6 +89,7 @@ void FizzBuzz::number(std::function<void(int)> printNumber)
         contract_assert(i % 3 != 0 && i % 5 != 0);    
 		
         printNumber(i);
+        results.push_front(std::to_string(i));
         int savedIndex = i;
         i++;
         

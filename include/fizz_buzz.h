@@ -6,11 +6,15 @@
 #include <functional>
 #include <iostream>
 #include <mutex>
+#include <vector>
 
 class FizzBuzz
 {
 	int n;
 	int i{1};
+
+    std::vector<std::string> results;
+
 	mutable std::mutex mtx;
 	std::condition_variable cv;
 
