@@ -9,6 +9,6 @@ Para esse trabalho os artigos escolhidos foram **Design by Contract** e **Contra
 
 O código para o qual os conceitos de teste foram aplicados é o exercício 1195 do leetcode: Fizz Buzz Multithreaded.
 
-O problema foi resolvido em C++ e os conceitos foram aplicados com "<contracts>", feature adicionada à standard library 
+O problema foi resolvido em C++ e os conceitos foram aplicados com contracts, feature adicionada à standard library 
 nas atualização do C++26 e os testes implementados com a biblioteca externa **Google Tests**, cuja documentação está disponível em: https://google.github.io/googletest/
 
