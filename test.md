@@ -40,3 +40,44 @@ A biblioteca também espera que um método seja definido para chamada caso um co
                  v.comment());
         std::abort();
     }
+
+## Casos de teste
+    
+### Para testar n >= 1
+
+    TEST(FizzBuzzContrato, NMenorQueMinimo)
+    {
+        EXPECT_DEATH(FizzBuzz(0), "CONTRATO VIOLADO");
+    }
+
+### Para testar resultado 
+    
+    TEST(FizzBuzz, SequenciaCorreta1)
+    {
+        std::vector<std::string> expected = {"1","2","fizz","4","buzz","fizz","7","8","fizz","buzz","11","fizz","13","14","fizzbuzz"};
+        auto st = MethodTest(15);
+
+        ASSERT_EQ(st.size(), expected.size()) << "Stacks results and expected are of unequal length";
+
+        for (int i = 0; i < expected.size(); i++) 
+        {
+            EXPECT_EQ(expected[i], st[i]) << "Vectors results and expected differ at index " << i;
+        }
+    }
+
+
+### Para testar resultado 2
+
+    TEST(FizzBuzz, SequenciaCorreta2)
+    {
+        std::vector<std::string> expected = {"1","2","fizz","4","buzz","fizz","7","8","fizz","buzz"};
+        auto st = MethodTest(10);
+
+        ASSERT_EQ(st.size(), expected.size()) << "Stacks results and expected are of unequal length";
+
+       for (int i = 0; i < expected.size(); i++) 
+        {
+            EXPECT_EQ(expected[i], st[i]) << "Vectors results and expected differ at index " << i;
+        }
+    }
+

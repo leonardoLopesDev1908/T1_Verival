@@ -10,6 +10,8 @@ else()
     set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
 
+find_package(GTest REQUIRED)
+
 add_executable(Main 
     src/main.cpp
     src/fizz_buzz.cpp
@@ -17,3 +19,12 @@ add_executable(Main
 )
 
 target_include_directories(Main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+add_executable(RunTests
+    src/fizz_buzz.cpp
+    src/contract_handler.cpp
+    tests/tests.cpp
+)
+
+target_include_directories(RunTests PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(RunTests PRIVATE GTest::gtest GTest::gtest_main)

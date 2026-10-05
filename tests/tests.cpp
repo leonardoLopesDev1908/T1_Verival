@@ -2,7 +2,6 @@
 
 #include <gtest/gtest.h>
 
-#include <iostream>
 #include <thread>
 #include <vector>
 
@@ -11,7 +10,7 @@ auto printBuzz = []() {};
 auto printFizzBuzz = []() {};
 auto printNumber = [](int) {};
 
-std::stack<std::string> MethodTest(int n)
+std::vector<std::string> MethodTest(int n)
 {
     FizzBuzz fizz(n);
 
@@ -28,42 +27,33 @@ std::stack<std::string> MethodTest(int n)
     return fizz.getResults();
 }
 
-TEST(FizzBuzz, EntradaInvalida)
+TEST(FizzBuzzContrato, NMenorQueMinimo)
 {
-
+    EXPECT_DEATH(FizzBuzz(0), "CONTRATO VIOLADO");
 }
 
-TEST(FizzBuzz, SequenciaCorreta)
+TEST(FizzBuzz, SequenciaCorreta1)
 {
     std::vector<std::string> expected = {"1","2","fizz","4","buzz","fizz","7","8","fizz","buzz","11","fizz","13","14","fizzbuzz"};
     auto st = MethodTest(15);
 
     ASSERT_EQ(st.size(), expected.size()) << "Stacks results and expected are of unequal length";
 
-    for (int i = 0; i < expected.size(); i++) {
-        auto curr = st.pop();
-        EXPECT_EQ(st[i], curr) << "Vectors results and expected differ at index " << i;
+    for (int i = 0; i < expected.size(); i++) 
+    {
+        EXPECT_EQ(expected[i], st[i]) << "Vectors results and expected differ at index " << i;
     }
 }
 
-TEST(FizzBuzz, SequenciaCorreta)
+TEST(FizzBuzz, SequenciaCorreta2)
 {
     std::vector<std::string> expected = {"1","2","fizz","4","buzz","fizz","7","8","fizz","buzz"};
     auto st = MethodTest(10);
 
     ASSERT_EQ(st.size(), expected.size()) << "Stacks results and expected are of unequal length";
 
-    for (int i = 0; i < expected.size(); i++) {
-        auto curr = st.pop();
-        EXPECT_EQ(st[i], curr) << "Vectors results and expected differ at index " << i;
-    }
-}
-
-bool assert(std::stack<std::string>& results, std::stack<std::string>& expected)
-{
-    ASSERT_EQ(results.size(), expected.size()) << "Stacks results and expected are of unequal length";
-
-    for (int i = 0; i < resuls.size(); ++i) {
-        EXPECT_EQ(results[i], expected[i]) << "Vectors results and expected differ at index " << i;
+    for (int i = 0; i < expected.size(); i++) 
+    {
+        EXPECT_EQ(expected[i], st[i]) << "Vectors results and expected differ at index " << i;
     }
 }
