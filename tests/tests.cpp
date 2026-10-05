@@ -32,6 +32,11 @@ TEST(FizzBuzzContrato, NMenorQueMinimo)
     EXPECT_DEATH(FizzBuzz(0), "CONTRATO VIOLADO");
 }
 
+TEST(FizzBuzzContrato, NMaiorQueMaximo)
+{
+    EXPECT_DEATH(FizzBuzz(51), "CONTRATO VIOLADO");
+}
+
 TEST(FizzBuzz, SequenciaCorreta1)
 {
     std::vector<std::string> expected = {"1","2","fizz","4","buzz","fizz","7","8","fizz","buzz","11","fizz","13","14","fizzbuzz"};

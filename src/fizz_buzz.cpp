@@ -6,7 +6,7 @@ FizzBuzz::FizzBuzz(int n)
 {
 	this->n = n;
     contract_assert(n >= 1);           
-	
+    contract_assert(n <= 50);	
     this->i = 1;
 }
 
