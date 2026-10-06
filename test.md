@@ -1,3 +1,4 @@
+
 ## Aplicação dos testes
 
 Para implementação das técnicas de teste por contrato, aplicou a feature da Biblioteca padrão de C++: Contract assertions
@@ -80,4 +81,6 @@ A biblioteca também espera que um método seja definido para chamada caso um co
             EXPECT_EQ(expected[i], st[i]) << "Vectors results and expected differ at index " << i;
         }
     }
+	
 
+<img width="1289" height="510" alt="Captura de tela de 2026-10-06 07-49-01" src="https://github.com/user-attachments/assets/5323069a-f9ce-410d-b463-dfe52da3068e" />
