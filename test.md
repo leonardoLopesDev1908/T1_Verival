@@ -1,32 +1,58 @@
 
-## Aplicação dos testes
+## Introdução aos testes
 
 Para implementação das técnicas de teste por contrato, aplicou a feature da Biblioteca padrão de C++: Contract assertions
 
-Em src/fizz_buzz.cpp, onde foi feita a solução do problema Leetcode, são aplicadas asserções de contrato. 
+Em src/fizz_buzz.cpp, onde foi feita a solução do problema Leetcode, são aplicadas asserções de contrato, bem como gerenciamento de threads para código concorrente.
 
-As técnicas previstas em Design by Contracts preveem a definição de pré-condições, pós-condições e invariantes. Mas alertam para como essa separação não garante funcionamento em caso de concorrência. Para isso, utilizou-se do segundo artigo, no qual buscou-se apresentar uma solução para as limitações deixadas pelo primeiro.
+As técnicas previstas em Design by Contracts preveem a definição de pré-condições, pós-condições e invariantes. Mas alertam para como essa separação não garante funcionamento em caso de concorrência. Para isso, utilizou-se do segundo artigo (Contracts for Concurrency), no qual buscou-se apresentar uma solução para as limitações deixadas pelo primeiro. 
 
 Para um programa concorrente, define-se que as pré-condições devem se tornar as condições de espera do programa, portanto:
 
-    
-    cv.wait(lck, [this] { return i > n || (i % 3 == 0 && i % 5 != 0); });
+   	bool ehFizz(int i) const { return i % 3 == 0 && i % 5 != 0; }
+    bool ehBuzz(int i) const { return i % 3 != 0 && i % 5 == 0; }
+    bool ehFizzBuzz(int i) const { return i % 3 == 0 && i % 5 == 0; }
+    bool ehNumber(int i) const { return i % 3 != 0 && i % 5 != 0; }
+	
+    cv.wait(lck, [this] { return i > n || (ehFizz(i)); });
 
-Além disso, a invariante foi definida para delimitar a iteração:
+Além disso, a invariante foi definida para delimitar a iteração, de forma que 1 <= i <= n, como previsto no método invariant():
+	    
+	bool invariant() const { 
+		return 1 <= i && i <= n+1 
+			&& results.size() == static_cast<std::size_t>(i - 1);
+    }
 
-    1 <= i <= n + 1
+Para os cabeçalhos, define-se a pré-condição de que o n de input deve estar dentro do intervalo especificado na descrição do problema no Leetcode. Além disso, como pós-condição, o método done() informa se i > n, que é o caso de retorno das threads.
+Essa condição, de que i > n, sinaliza que a iteração foi finaliza e cada um dos métodos retorna. 
+	
+	void fizz(std::function<void()> printFizz)
+        pre(1 <= n && n <= 50)
+        post(done());
 
-Por fim, como pós-condições, espera-se que i tenha sido incrementado apenas uma vez. Portanto, o bloco de código que realiza esses testes está definido como:
+		...
+		
+    bool done() const 
+    {
+        std::lock_guard<std::mutex> lck(mtx);
+        return i > n;
+    }
 
-        contract_assert(invariant());           
-        contract_assert(i % 3 == 0 && i % 5 != 0);    
+Por meio de asserções internas do método buscou-se realizar verificações internas de funcionamento. Primeiro, ao sair da espera, verifica-se se a condição de espera foi de fato satisfeita para que a espera tenha chegado ao fim. 
+
+		std::unique_lock<std::mutex> lck(mtx);
+		cv.wait(lck, [this] { return i > n || (ehFizz(i)); });
+		if(i > n) return;
+
+        contract_assert(ehFizz(i));    
 		
         printFizz();
-        int savedIndex = i;
+        results.push_back("fizz");
         i++;
         
-        contract_assert(i == savedIndex + 1);
         contract_assert(invariant());
+
+        cv.notify_all();
 
 A biblioteca também espera que um método seja definido para chamada caso um contrato seja violado. Em src/contract_handler.cpp:
 
@@ -41,6 +67,31 @@ A biblioteca também espera que um método seja definido para chamada caso um co
                  v.comment());
         std::abort();
     }
+
+## Aplicação das técnicas
+
+### Design by Contract (Meyer, 1992)
+
+| Técnica do artigo | No código |
+| --- | --- |
+| **Pré-condição como obrigação do cliente** | `pre(1 <= n && n <= 50)` no construtor |
+| **Pós-condição como obrigação do fornecedor** | `post(invariant())` no construtor e `post(done())` nos métodos, que garante que a sequência foi completamente consumida |
+| **Invariante de classe** | `invariant()`: $1 \le i \le n+1$ e `results.size() == i - 1` |
+| **Monitoramento de asserções para depurar** | Os `contract_assert` só falham se houver bug de implementação |
+| **Contrato como parte da interface** | `pre` e `post` declarados explicitamente na interface da classe no `.h` |
+
+---
+
+### Contracts for Concurrency (parcialmente)
+
+| Ideia do artigo | No código |
+| --- | --- |
+| **Pré-condição como condição de espera** | Em cv.wait a execução do método é adiada até a condição se tornar verdadeira |
+| **Espera no lado do fornecedor** | A thread chamadora bloqueia dentro do próprio objeto |
+| **A pré-condição vale na entrada do corpo** | O `contract_assert(ehFizz(i))` confirma que a sincronização funcionou corretamente |
+| **Atomicidade** | O `std::unique_lock` cobre a espera, a ação executada e o incremento `i++`, o que garante a atomicidade sem brecha de acesso a outras threads. |
+
+---
 
 ## Casos de teste
     
