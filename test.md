@@ -82,7 +82,7 @@ A biblioteca também espera que um método seja definido para chamada caso um co
 
 ---
 
-### Contracts for Concurrency (parcialmente)
+### Contracts for Concurrency
 
 | Ideia do artigo | No código |
 | --- | --- |
